@@ -7,17 +7,19 @@ from flask import (
 
 from flask_cors import CORS
 
-import tensorflow as tf
-
-from tensorflow.keras.models import load_model
-
-from tensorflow.keras.preprocessing import image
-
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-
 import numpy as np
 
 from PIL import Image
+
+# Import TFLite interpreter with fallbacks to avoid full TensorFlow on Render
+try:
+    import tflite_runtime.interpreter as tflite
+except ImportError:
+    try:
+        import tensorflow.lite as tflite
+    except ImportError:
+        import tensorflow as tf
+        tflite = tf.lite
 
 # ==========================================
 # FLASK SETUP
@@ -28,14 +30,18 @@ app = Flask(__name__)
 CORS(app)
 
 # ==========================================
-# LOAD MODEL
+# LOAD MODEL (TFLite)
 # ==========================================
 
-MODEL_PATH = "saved_model/visionai_mobilenetv2_final.h5"
+MODEL_PATH = "saved_model/visionai_mobilenetv2_final.tflite"
 
-model = load_model(MODEL_PATH)
+interpreter = tflite.Interpreter(model_path=MODEL_PATH)
+interpreter.allocate_tensors()
 
-print("Model Loaded Successfully!")
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
+print("TFLite Model Loaded Successfully!")
 
 # ==========================================
 # CLASS LABELS
@@ -88,17 +94,18 @@ def predict():
 
         img = img.resize((96,96))
 
-        img_array = image.img_to_array(img)
-
+        # Convert to numpy array and preprocess for MobileNetV2: scale to [-1, 1]
+        img_array = np.array(img, dtype=np.float32)
+        img_array = (img_array / 127.5) - 1.0
         img_array = np.expand_dims(img_array, axis=0)
 
-        img_array = preprocess_input(img_array)
-
         # ==========================
-        # MODEL PREDICTION
+        # MODEL PREDICTION (TFLite Inference)
         # ==========================
 
-        prediction = model.predict(img_array)
+        interpreter.set_tensor(input_details[0]['index'], img_array)
+        interpreter.invoke()
+        prediction = interpreter.get_tensor(output_details[0]['index'])
 
         predicted_class = np.argmax(prediction)
 
@@ -136,8 +143,14 @@ def predict():
 # ==========================================
 # RUN APP
 # ==========================================
+# ==========================================
+# RUN APP
+# ==========================================
 
 if __name__ == "__main__":
 
-    app.run(debug=True)
-    
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )

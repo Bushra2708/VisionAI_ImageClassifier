@@ -17,6 +17,7 @@
     --bg-main: #141211;            /* Deep obsidian dark brown */
     --bg-surface: rgba(42, 36, 33, 0.6);
     --bg-surface-hover: rgba(92, 79, 74, 0.22);
+    --bg-predicted: rgba(92, 79, 74, 0.22);
     --border-color: rgba(255, 235, 204, 0.1);
     --border-glow: rgba(47, 160, 132, 0.2);
     --text-main: #FFEBCC;          /* Cream text */
@@ -26,22 +27,31 @@
     --glow-one: rgba(47, 160, 132, 0.35); /* Teal glow */
     --glow-two: rgba(194, 208, 153, 0.25); /* Sage glow */
     --doodle-opacity: 0.06;
+    --gradient-hero: linear-gradient(135deg, var(--palette-teal) 0%, var(--palette-sage) 100%);
+    --badge-text: var(--palette-sage);
+    --badge-bg: rgba(194, 208, 153, 0.15);
+    --badge-border: rgba(194, 208, 153, 0.25);
 }
 
 [data-theme="light"] {
     /* Theme Engine Variables (Light Mode) */
-    --bg-main: #FFEBCC;            /* Gorgeous Cream canvas */
+    --bg-main: #FDFBF7;            /* Elegant soft Cream canvas */
     --bg-surface: rgba(255, 255, 255, 0.65);
     --bg-surface-hover: rgba(255, 255, 255, 0.9);
+    --bg-predicted: rgba(47, 160, 132, 0.08); /* Sophisticated light teal highlight */
     --border-color: rgba(92, 79, 74, 0.15);
     --border-glow: rgba(47, 160, 132, 0.3);
     --text-main: #5C4F4A;          /* Deep Brown text */
-    --text-muted: #767F9E;         /* Slate blue */
+    --text-muted: #4A5168;         /* High-contrast Slate Blue */
     --text-inverse: #FFEBCC;       /* Cream text */
-    --shadow-main: rgba(92, 79, 74, 0.1);
-    --glow-one: rgba(47, 160, 132, 0.15);
-    --glow-two: rgba(174, 36, 72, 0.1); /* Crimson hue glow */
+    --shadow-main: rgba(92, 79, 74, 0.08);
+    --glow-one: rgba(47, 160, 132, 0.12);
+    --glow-two: rgba(174, 36, 72, 0.07); /* Subtle crimson glow */
     --doodle-opacity: 0.12;
+    --gradient-hero: linear-gradient(135deg, #1C7E68 0%, #68793D 100%); /* Rich teal to dark sage for readability */
+    --badge-text: #68793D;         /* High-contrast green text */
+    --badge-bg: rgba(104, 121, 61, 0.1);
+    --badge-border: rgba(104, 121, 61, 0.2);
 }
 
 /* ==========================================================================
@@ -293,7 +303,7 @@ h1, h2, h3, h4, .logo {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, var(--palette-teal) 0%, var(--palette-sage) 100%);
+    background: var(--gradient-hero);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -388,7 +398,7 @@ h1, h2, h3, h4, .logo {
 
 /* ACTIVE / HIGHLIGHT STATE (When target class predicted) */
 .category-card.predicted {
-    background: var(--bg-surface-hover);
+    background: var(--bg-predicted);
     box-shadow: 0 0 25px var(--border-glow);
     animation: activePulse 2s infinite alternate ease-in-out;
 }
@@ -691,9 +701,9 @@ h1, h2, h3, h4, .logo {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 30px;
-    background: rgba(194, 208, 153, 0.15);
-    color: var(--palette-sage);
-    border: 1px solid rgba(194, 208, 153, 0.25);
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    border: 1px solid var(--badge-border);
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;

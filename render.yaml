@@ -10,3 +10,7 @@ services:
       gunicorn app:app
 
     plan: free
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.3
