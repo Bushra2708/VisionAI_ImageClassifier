@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: visionai-classifier
+    runtime: python
+
+    buildCommand: |
+      pip install -r requirements.txt
+
+    startCommand: |
+      gunicorn app:app
+
+    plan: free

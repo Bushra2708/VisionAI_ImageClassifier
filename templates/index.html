@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VisionAI • Cognitive Image Classifier</title>
+    
+    <!-- Google Fonts: Outfit & Inter for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Floating Background Doodles -->
+    <div class="doodle doodle-1">
+        <!-- Neural Net lattice doodle -->
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.8">
+            <circle cx="20" cy="30" r="3" fill="currentColor" />
+            <circle cx="50" cy="15" r="3" fill="currentColor" />
+            <circle cx="80" cy="35" r="3" fill="currentColor" />
+            <circle cx="30" cy="70" r="3" fill="currentColor" />
+            <circle cx="70" cy="65" r="3" fill="currentColor" />
+            <line x1="20" y1="30" x2="50" y2="15" />
+            <line x1="50" y1="15" x2="80" y2="35" />
+            <line x1="20" y1="30" x2="30" y2="70" />
+            <line x1="30" y1="70" x2="70" y2="65" />
+            <line x1="70" y1="65" x2="80" y2="35" />
+            <line x1="50" y1="15" x2="70" y2="65" />
+            <line x1="20" y1="30" x2="70" y2="65" />
+        </svg>
+    </div>
+    <div class="doodle doodle-2">
+        <!-- Bounding box with camera corner corners doodle -->
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M10,25 L10,10 L25,10" />
+            <path d="M90,25 L90,10 L75,10" />
+            <path d="M10,75 L10,90 L25,90" />
+            <path d="M90,75 L90,90 L75,90" />
+            <circle cx="50" cy="50" r="8" stroke-dasharray="4 2" />
+        </svg>
+    </div>
+    <div class="doodle doodle-3">
+        <!-- Abstract geometry mathematical rings -->
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.6">
+            <circle cx="50" cy="50" r="35" />
+            <circle cx="50" cy="50" r="25" stroke-dasharray="6 3" />
+            <path d="M15,50 L85,50" stroke-dasharray="2 4" />
+            <path d="M50,15 L50,85" stroke-dasharray="2 4" />
+        </svg>
+    </div>
+    <div class="doodle doodle-4">
+        <!-- Technical focus grid helper -->
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.8">
+            <rect x="20" y="20" width="60" height="60" rx="6" />
+            <path d="M40,20 L40,80" stroke-dasharray="1 6" />
+            <path d="M60,20 L60,80" stroke-dasharray="1 6" />
+            <path d="M20,40 L80,40" stroke-dasharray="1 6" />
+            <path d="M20,60 L80,60" stroke-dasharray="1 6" />
+        </svg>
+    </div>
+
+    <!-- Background Ambient Glows -->
+    <div class="bg-glow glow1"></div>
+    <div class="bg-glow glow2"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Navbar -->
+        <header class="navbar">
+            <div class="logo">
+                <span class="logo-accent">Vision</span>AI
+            </div>
+            
+            <div class="navbar-right">
+                <span class="nav-text">Cognitive Image Recognition</span>
+                
+                <!-- Premium Theme Toggle Button -->
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark/light theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>
+                Intelligent Neural
+                <span class="gradient-text">Classification</span>
+            </h1>
+            <p>
+                Upload any picture and see the deep learning model map the subject to one of the 10 target categories below. High-precision neural identification without the clutter.
+            </p>
+        </section>
+
+        <!-- Category Showcase Grid -->
+        <section class="category-grid-container">
+            <h3 class="section-title">Supported Classifiers</h3>
+            <div class="category-grid" id="categoryGrid">
+                
+                <!-- Airplane -->
+                <div class="category-card" data-class="Airplane">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            <path d="M12 22V12" />
+                            <path d="M12 12l8.5-4.9" />
+                            <path d="M12 12L3.5 7.1" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Airplane</span>
+                </div>
+
+                <!-- Automobile -->
+                <div class="category-card" data-class="Automobile">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <rect x="1" y="3" width="22" height="13" rx="2" />
+                            <path d="M4 16 L2 20" />
+                            <path d="M20 16 L22 20" />
+                            <circle cx="7" cy="10" r="1.5" />
+                            <circle cx="17" cy="10" r="1.5" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Automobile</span>
+                </div>
+
+                <!-- Bird -->
+                <div class="category-card" data-class="Bird">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M16 3h5v5" />
+                            <path d="M21 3L14 10" />
+                            <path d="M9 14l-4 4" />
+                            <path d="M18 10a9 9 0 0 1-9-9" />
+                            <path d="M14.5 14.5A6 6 0 0 1 4 4" />
+                            <path d="M20 14a6 6 0 0 1-6 6H4v-4" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Bird</span>
+                </div>
+
+                <!-- Cat -->
+                <div class="category-card" data-class="Cat">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M12 5c-1.657 0-3 1.343-3 3v2c0 2.21 1.79 4 4 4s4-1.79 4-4V8c0-1.657-1.343-3-3-3z" />
+                            <path d="M9 7L6 3v3" />
+                            <path d="M15 7l3-4v3" />
+                            <path d="M12 14v6c0 1.1-.9 2-2 2H8" />
+                            <circle cx="10.5" cy="9.5" r="0.75" fill="currentColor" />
+                            <circle cx="13.5" cy="9.5" r="0.75" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Cat</span>
+                </div>
+
+                <!-- Deer -->
+                <div class="category-card" data-class="Deer">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M12 2v6" />
+                            <path d="M8 3.5l4 2.5" />
+                            <path d="M16 3.5L12 6" />
+                            <path d="M6 6c0 3.31 2.69 6 6 6s6-2.69 6-6" />
+                            <path d="M12 12v10" />
+                            <path d="M9 16l3 2" />
+                            <path d="M15 16l-3 2" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Deer</span>
+                </div>
+
+                <!-- Dog -->
+                <div class="category-card" data-class="Dog">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M12 14c2.76 0 5-2.24 5-5V6c0-2.76-2.24-5-5-5S7 3.24 7 6v3c0 2.76 2.24 5 5 5z" />
+                            <path d="M6 6v3a6 6 0 0 0 2.06 4.47" />
+                            <path d="M18 6v3a6 6 0 0 1-2.06 4.47" />
+                            <path d="M12 14v8" />
+                            <circle cx="10" cy="6" r="0.75" fill="currentColor" />
+                            <circle cx="14" cy="6" r="0.75" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Dog</span>
+                </div>
+
+                <!-- Frog -->
+                <div class="category-card" data-class="Frog">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                            <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                            <circle cx="9" cy="9" r="1.5" />
+                            <circle cx="15" cy="9" r="1.5" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Frog</span>
+                </div>
+
+                <!-- Horse -->
+                <div class="category-card" data-class="Horse">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M3 10h11l6-4v12l-6-4H3z" />
+                            <path d="M14 6v12" />
+                            <path d="M6 14v6" />
+                            <path d="M10 14v6" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Horse</span>
+                </div>
+
+                <!-- Ship -->
+                <div class="category-card" data-class="Ship">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M2 17l3 4h14l3-4H2z" />
+                            <path d="M5 17V8l7-5 7 5v9" />
+                            <path d="M12 3v14" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Ship</span>
+                </div>
+
+                <!-- Truck -->
+                <div class="category-card" data-class="Truck">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M14 18H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8m6 4h-6M20 18h-6m6-8v6a2 2 0 0 1-2 2" />
+                            <circle cx="7.5" cy="18.5" r="2.5" />
+                            <circle cx="16.5" cy="18.5" r="2.5" />
+                        </svg>
+                    </div>
+                    <span class="card-name">Truck</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Main Interaction Workspace -->
+        <main class="workspace-section">
+            
+            <!-- Upload Card -->
+            <section class="glass-panel upload-card" id="uploadPanel">
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="imageInput" accept="image/*" hidden>
+                    
+                    <div class="upload-content">
+                        <div class="upload-pulse-ring">
+                            <svg class="upload-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="17 8 12 3 7 8" />
+                                <line x1="12" y1="3" x2="12" y2="15" />
+                            </svg>
+                        </div>
+                        <h2>Drop Image Here</h2>
+                        <p>Drag & Drop or Click to browse your machine</p>
+                        <button class="btn btn-secondary" id="uploadBtn">Choose Image</button>
+                    </div>
+                </div>
+
+                <!-- Preview Frame (Initially Hidden) -->
+                <div class="preview-container hidden" id="previewContainer">
+                    <div class="preview-wrapper">
+                        <img id="previewImage" src="" alt="Preview">
+                        <button class="remove-btn" id="removeBtn" aria-label="Remove image">×</button>
+                    </div>
+                    <div class="file-details" id="fileDetails"></div>
+                </div>
+
+                <!-- Predict Trigger Button (Initially Hidden until file chosen) -->
+                <button class="btn btn-primary hidden" id="predictBtn">
+                    <span>Analyze Image Structure</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-arrow">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </button>
+            </section>
+
+            <!-- Loader (Initially Hidden) -->
+            <div class="loader-container hidden" id="loaderContainer">
+                <div class="loader-wrapper">
+                    <div class="loader-ring"></div>
+                    <div class="loader-core"></div>
+                </div>
+                <h3>Deploying Neural Network...</h3>
+                <p>Decoding pixels and searching patterns</p>
+            </div>
+
+            <!-- Result Card (Initially Hidden) -->
+            <section class="glass-panel result-card hidden" id="resultCard">
+                <div class="result-badge">Network Consensus</div>
+                
+                <h2 class="result-title">Subject Identified</h2>
+
+                <div class="prediction-highlight-box">
+                    <div class="identification-label">Class Label</div>
+                    <h1 id="predictionText">Dog</h1>
+                </div>
+
+                <div class="result-meta-box">
+                    <p class="result-description" id="resultDescription">
+                        The convolutional layers have successfully matched the input image structural vectors to the classification category card.
+                    </p>
+                </div>
+
+                <!-- Action Button to Clear/Reset -->
+                <button class="btn btn-crimson" id="resetBtn">
+                    <span>Clear Workspace</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                        <path d="M3 6h18" />
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                </button>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
